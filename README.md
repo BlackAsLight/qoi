@@ -1,3 +1,3 @@
 # qoi
 
-[spec[(https://qoiformat.org/qoi-specification.pdf)
+[spec](https://qoiformat.org/qoi-specification.pdf)
