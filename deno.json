@@ -1,0 +1,14 @@
+{
+  "name": "@img/qoi",
+  "version": "0.1.0",
+  "exports": "./mod.ts",
+  "tasks": {
+    "test": "deno test --parallel",
+    "ok": "deno fmt && deno lint && deno task test"
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@^1.0.6",
+    "@std/bytes": "jsr:@std/bytes@^1.0.2",
+    "@std/streams": "jsr:@std/streams@^1.0.6"
+  }
+}
