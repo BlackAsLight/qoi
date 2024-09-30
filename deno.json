@@ -6,7 +6,8 @@
     "./encoder-stream": "./src/encoder_stream.ts"
   },
   "tasks": {
-    "test": "deno test --parallel",
+    "coverage": "deno coverage --html coverage/ && ./view_coverage.sh",
+    "test": "deno test --parallel --coverage",
     "ok": "deno fmt && deno lint && deno task test"
   },
   "imports": {
