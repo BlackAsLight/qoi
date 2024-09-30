@@ -1,7 +1,10 @@
 {
   "name": "@img/qoi",
   "version": "0.1.0",
-  "exports": "./mod.ts",
+  "exports": {
+    ".": "./src/mod.ts",
+    "./encoder-stream": "./src/encoder_stream.ts"
+  },
   "tasks": {
     "test": "deno test --parallel",
     "ok": "deno fmt && deno lint && deno task test"
