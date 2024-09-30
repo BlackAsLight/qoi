@@ -56,14 +56,16 @@ export class QOIEncoderStream
       const { done, value } = await this.#source
         .read(new Uint8Array(4), { min: 4 });
       if (done) {
+        if (value instanceof Uint8Array && value.length) {
+          throw new RangeError(
+            "Unexpected number of bytes from readable stream",
+          );
+        }
         if (run) {
           // QOI_OP_RUN
           yield new Uint8Array([(0b11 << 6) + run - 1]);
         }
         break;
-      }
-      if (value.length !== 4) {
-        throw new RangeError("Unexpected number of bytes from readable stream");
       }
       ++count;
 
