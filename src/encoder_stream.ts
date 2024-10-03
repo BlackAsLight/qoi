@@ -1,18 +1,12 @@
 import { toByteStream } from "./_common.ts";
-
-export interface QOIOptions {
-  width: number;
-  height: number;
-  channels: "rgb" | "rgba";
-  colorspace: 0 | 1;
-}
+import type { QOIOptions } from "./types.ts";
 
 export class QOIEncoderStream
   implements TransformStream<Uint8Array, Uint8Array> {
   #width: number;
   #height: number;
   #isRGB: boolean;
-  #colorspace: number;
+  #colorspace: 0 | 1;
   #source: ReadableStreamBYOBReader;
   #readable: ReadableStream<Uint8Array>;
   #writable: WritableStream<Uint8Array>;
@@ -51,7 +45,7 @@ export class QOIEncoderStream
     let run = 0;
     let previousPixel = new Uint8Array([0, 0, 0, 255]);
     const seenPixels: Uint8Array[] = new Array(64)
-      .fill(new Uint8Array([0, 0, 0, 255]));
+      .fill(new Uint8Array([0, 0, 0, 0]));
     while (true) {
       const { done, value } = await this.#source
         .read(new Uint8Array(4), { min: 4 });
@@ -88,6 +82,8 @@ export class QOIEncoderStream
           // QOI_OP_INDEX
           yield new Uint8Array([(0b00 << 6) + index]);
         } else {
+          seenPixels[index] = value;
+
           let diff = new Array(this.#isRGB ? 3 : 4).fill(0)
             .map((_, i) => value[i] - previousPixel[i]);
           if (
@@ -153,7 +149,8 @@ export class QOIEncoderStream
   }
 
   #index(a: Uint8Array): number {
-    return (a[0] * 3 + a[1] * 5 + a[2] * 7 + +(this.#isRGB && a[3] * 11)) % 64;
+    return (a[0] * 3 + a[1] * 5 + a[2] * 7 +
+      (this.#isRGB ? 255 * 11 : a[3] * 11)) % 64;
   }
 
   get readable(): ReadableStream<Uint8Array> {

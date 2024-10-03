@@ -7,7 +7,7 @@
   },
   "tasks": {
     "coverage": "deno coverage --html coverage/ && ./view_coverage.sh",
-    "test": "deno test --parallel --coverage",
+    "test": "rm coverage/*.json || true && deno test --parallel --coverage",
     "ok": "deno fmt && deno lint && deno task test"
   },
   "imports": {
