@@ -190,7 +190,7 @@ Deno.test("QOIDecoderStream() rejecting invalid premature exit", async () => {
       ),
   )).slice(0, 14);
 
-  assertRejects(
+  await assertRejects(
     async () => {
       const decoderStream = new QOIDecoderStream();
       for await (
