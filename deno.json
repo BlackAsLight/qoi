@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "exports": {
     ".": "./src/mod.ts",
+    "./decoder-stream": "./src/decoder_stream.ts",
     "./encoder-stream": "./src/encoder_stream.ts"
   },
   "tasks": {
