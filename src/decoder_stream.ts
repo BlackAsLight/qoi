@@ -15,7 +15,15 @@ export class QOIDecoderStream
     >();
     this.#source = toByteStream(readable).getReader({ mode: "byob" });
     this.#header();
-    this.#readable = toByteStream(ReadableStream.from(this.#qoi()));
+    this.#readable = toByteStream(
+      ReadableStream
+        .from(this.#qoi())
+        .pipeThrough(
+          new TransformStream({
+            cancel: async (reason) => await this.#source.cancel(reason),
+          }),
+        ),
+    );
     this.#writable = writable;
   }
 
@@ -54,7 +62,7 @@ export class QOIDecoderStream
       .fill(new Uint8Array([0, 0, 0, 0]));
     while (true) {
       // Premature Exit
-      if (![0, 0, 0, 0, 0, 0, 0, 1].every((x, i) => x === this.#buffer[i])) {
+      if ([0, 0, 0, 0, 0, 0, 0, 1].every((x, i) => x === this.#buffer[i])) {
         if (count !== this.#options.width * this.#options.height) {
           throw new RangeError(
             `QOI stream received exit code, but pixels (${count}) decoded does not match width * height (${
@@ -106,16 +114,16 @@ export class QOIDecoderStream
         seenPixels[this.#index(previousPixel)] = previousPixel;
         yield previousPixel.slice();
       } else {
-        switch (value[0] & 0b11_000000) {
+        switch (value[0] >> 6 & 0xFF) {
           case 0:
             yield seenPixels[value[0] & 0b00_111111].slice();
             break;
           case 1: {
             // QOI_OP_DIFF
             previousPixel = new Uint8Array([
-              (value[0] & 0b00_110000) + previousPixel[0] - 2,
-              (value[0] & 0b00_001100) + previousPixel[1] - 2,
-              (value[0] & 0b00_000011) + previousPixel[2] - 2,
+              (value[0] >> 4 & 0b11) + previousPixel[0] - 2,
+              (value[0] >> 2 & 0b11) + previousPixel[1] - 2,
+              (value[0] & 0b11) + previousPixel[2] - 2,
               previousPixel[3],
             ]);
             seenPixels[this.#index(previousPixel)] = previousPixel;
@@ -132,9 +140,9 @@ export class QOIDecoderStream
             }
             const greenDiff = (value[0] & 0b00_111111) - 32;
             previousPixel = new Uint8Array([
-              (next[0] & 0b1111_0000) + greenDiff + previousPixel[0] - 8,
+              (next[0] >> 4) + greenDiff + previousPixel[0] - 8,
               greenDiff + previousPixel[1],
-              (next[1] & 0b0000_1111) + greenDiff + previousPixel[2] - 8,
+              (next[0] & 0b0000_1111) + greenDiff + previousPixel[2] - 8,
               previousPixel[3],
             ]);
             seenPixels[this.#index(previousPixel)] = previousPixel;
@@ -142,9 +150,10 @@ export class QOIDecoderStream
             break;
           }
           default: // 3
-            yield new Uint8Array(4 * (value[0] & 0b00_111111) + 4)
-              .map((_, i) => previousPixel[i % 4]);
             // QOI_OP_RUN
+              count += value[0] & 0b00_111111;
+              yield new Uint8Array(4 * (value[0] & 0b00_111111) + 4)
+                .map((_, i) => previousPixel[i % 4]);
         }
       }
     }
