@@ -1,7 +1,6 @@
-import { assertEquals } from "@std/assert";
+import { assertEquals, assertRejects } from "@std/assert";
 import { toBytes } from "@std/streams/unstable-to-bytes";
 import { QOIEncoderStream } from "./encoder_stream.ts";
-import { assertRejects } from "@std/assert/rejects";
 
 Deno.test("QOIEncoderStream() correctly encoding header", async () => {
   assertEquals(
