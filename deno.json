@@ -10,6 +10,9 @@
     "test": "deno test --parallel --coverage --clean",
     "ok": "deno fmt --check && deno lint && deno task test"
   },
+  "fmt": {
+    "exclude": ["coverage/", "**/.*"]
+  },
   "lint": {
     "rules": {
       "tags": ["recommended"],
