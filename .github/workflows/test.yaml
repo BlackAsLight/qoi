@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: denoland/setup-deno@v1
-      - run: deno test --parallel
+      - run: deno test --parallel --doc --trace-leaks
   lint:
     runs-on: ubuntu-latest
     steps:
