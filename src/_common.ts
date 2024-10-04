@@ -9,8 +9,8 @@ export function toByteStream(
     const reader = readable.getReader();
     return new ReadableStream({
       type: "bytes",
-      async pull(controller) {
-        const value = await async function () {
+      async pull(controller): Promise<void> {
+        const value = await async function (): Promise<Uint8Array | undefined> {
           while (true) {
             const { done, value } = await reader.read();
             if (done) return undefined;

@@ -10,6 +10,26 @@
     "test": "deno test --parallel --coverage --clean",
     "ok": "deno fmt --check && deno lint && deno task test"
   },
+  "lint": {
+    "rules": {
+      "tags": ["recommended"],
+      "include": [
+        "camelcase",
+        "explicit-function-return-type",
+        "explicit-module-boundary-types",
+        "no-console",
+        "no-eval",
+        "no-inferrable-types",
+        "no-sparse-arrays",
+        "no-sync-fn-in-async-fn",
+        "no-throw-literal",
+        "no-undef",
+        "prefer-ascii",
+        "single-var-declarator",
+        "verbatim-module-syntax"
+      ]
+    }
+  },
   "imports": {
     "@std/assert": "jsr:@std/assert@^1.0.6",
     "@std/bytes": "jsr:@std/bytes@^1.0.2",
