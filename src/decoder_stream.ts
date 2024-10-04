@@ -151,9 +151,9 @@ export class QOIDecoderStream
           }
           default: // 3
             // QOI_OP_RUN
-              count += value[0] & 0b00_111111;
-              yield new Uint8Array(4 * (value[0] & 0b00_111111) + 4)
-                .map((_, i) => previousPixel[i % 4]);
+            count += value[0] & 0b00_111111;
+            yield new Uint8Array(4 * (value[0] & 0b00_111111) + 4)
+              .map((_, i) => previousPixel[i % 4]);
         }
       }
     }
