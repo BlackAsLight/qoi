@@ -8,7 +8,7 @@
   },
   "tasks": {
     "coverage": "deno coverage --html coverage/ && ./view_coverage.sh",
-    "test": "deno test --parallel --coverage --clean",
+    "test": "deno test --parallel --trace-leaks --coverage --clean",
     "ok": "deno fmt --check && deno lint && deno task test"
   },
   "fmt": {
