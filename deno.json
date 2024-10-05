@@ -1,13 +1,24 @@
 {
   "name": "@img/qoi",
   "version": "0.1.0",
+  "publish": {
+    "exclude": ["**/.*"]
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@^1.0.6",
+    "@std/bytes": "jsr:@std/bytes@^1.0.2",
+    "@std/streams": "jsr:@std/streams@^1.0.6"
+  },
   "exports": {
     ".": "./src/mod.ts",
     "./decoder-stream": "./src/decoder_stream.ts",
     "./encoder-stream": "./src/encoder_stream.ts"
   },
   "tasks": {
-    "coverage": "deno coverage --html coverage/ && ./view_coverage.sh",
+    "coverage": "deno coverage --html coverage/",
+    "coverage:mac": "deno task coverage && open coverage/html/index.html",
+    "coverage:lin": "deno task coverage && xdg-open coverage/html/index.html",
+    "coverage:win": "deno tsak coverage && start coverage/html/index.html",
     "test": "deno test --parallel --doc --trace-leaks --coverage --clean",
     "ok": "deno fmt && deno lint && deno task test"
   },
@@ -33,10 +44,5 @@
         "verbatim-module-syntax"
       ]
     }
-  },
-  "imports": {
-    "@std/assert": "jsr:@std/assert@^1.0.6",
-    "@std/bytes": "jsr:@std/bytes@^1.0.2",
-    "@std/streams": "jsr:@std/streams@^1.0.6"
   }
 }
