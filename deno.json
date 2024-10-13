@@ -19,7 +19,7 @@
     "coverage:mac": "deno task coverage && open coverage/html/index.html",
     "coverage:lin": "deno task coverage && xdg-open coverage/html/index.html",
     "coverage:win": "deno task coverage && start coverage/html/index.html",
-    "test": "deno test -R=./ -W=./ --parallel --doc --trace-leaks --coverage --clean",
+    "test": "deno test -R='./' -W='./' --parallel --doc --trace-leaks --coverage --clean",
     "ok": "deno fmt && deno lint && deno task test"
   },
   "fmt": {

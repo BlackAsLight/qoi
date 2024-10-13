@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: denoland/setup-deno@v2
-      - run: deno test -R=./ -W=./ --parallel --doc --trace-leaks
+      - run: deno test -R='./' -W='./' --parallel --doc --trace-leaks
   lint:
     runs-on: ubuntu-latest
     steps:
