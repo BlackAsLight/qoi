@@ -28,6 +28,8 @@ import type { QOIOptions } from "./types.ts";
  *   )
  *   .pipeTo((await Deno.create("image.qoi")).writable);
  * ```
+ *
+ * @module
  */
 export class QOIEncoderStream
   implements TransformStream<Uint8Array, Uint8Array> {

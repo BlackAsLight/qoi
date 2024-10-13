@@ -17,6 +17,8 @@ import type { QOIOptions } from "./types.ts";
  *
  * console.log(await decoderStream.option);
  * ```
+ *
+ * @module
  */
 export class QOIDecoderStream
   implements TransformStream<Uint8Array, Uint8Array> {
