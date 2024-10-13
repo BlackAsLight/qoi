@@ -1,6 +1,34 @@
-import { toByteStream } from "./_common.ts";
+import { toByteStream } from "@std/streams/unstable-to-byte-stream";
 import type { QOIOptions } from "./types.ts";
 
+/**
+ * The QOIEncoderStream is a TransformStream that encodes raw image data into
+ * the QOI image format. The raw data is expected to be a sequence of
+ * `[ r, g, b, a ]` numbers.
+ *
+ * @example
+ * ```ts
+ * import { QOIEncoderStream } from "@img/qoi";
+ *
+ * await ReadableStream
+ *   .from(async function* () {
+ *     for (let r = 0; r < 256; ++r) {
+ *       for (let c = 0; c < 256; ++c) {
+ *         yield Uint8Array.from([255 - r, c, r, 255]);
+ *       }
+ *     }
+ *   }())
+ *   .pipeThrough(
+ *     new QOIEncoderStream({
+ *       width: 256,
+ *       height: 256,
+ *       channels: "rgb",
+ *       colorspace: 0,
+ *     }),
+ *   )
+ *   .pipeTo((await Deno.create("image.qoi")).writable);
+ * ```
+ */
 export class QOIEncoderStream
   implements TransformStream<Uint8Array, Uint8Array> {
   #width: number;
