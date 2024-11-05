@@ -119,6 +119,7 @@ export class QOIDecoderStream
       } else {
         switch (value[0] >> 6 & 0xFF) {
           case 0:
+            // QOI_OP_INDEX
             yield seenPixels[value[0] & 0b00_111111].slice();
             break;
           case 1: {
