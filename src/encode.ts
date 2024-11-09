@@ -1,4 +1,4 @@
-import { calcIndex, isEqual } from "./_common.ts";
+import { createEncoder } from "./_common.ts";
 import type { QOIOptions } from "./types.ts";
 
 /**
@@ -44,14 +44,14 @@ export function encodeQOI(
   if (input.length % 4 !== 0) {
     throw new RangeError("Unexpected number of bytes from input");
   }
+  const isRGB = options.channels === "rgb";
 
   const originalSize = input.length;
-  const maxSize = 14 + originalSize +
-    (options.channels === "rgb" ? 0 : originalSize / 4) + 8;
-  const isRGB = options.channels === "rgb";
+  const maxSize = 14 + originalSize + (isRGB ? 0 : originalSize / 4) + 8;
   // deno-lint-ignore no-explicit-any
   const output = new Uint8Array((input.buffer as any).transfer(maxSize));
-  output.set(output.subarray(0, originalSize), 14);
+  output.set(output.subarray(0, originalSize), maxSize - originalSize);
+
   output.set([113, 111, 105, 102]);
   {
     const view = new DataView(new ArrayBuffer(4));
@@ -63,88 +63,9 @@ export function encodeQOI(
   output[12] = isRGB ? 3 : 4;
   output[13] = options.colorspace;
 
-  let offset = 14;
-  let o = offset;
-  let run = 0;
-  let count = 0;
-  const previousPixel = new Uint8Array([0, 0, 0, 255]);
-  const seenPixels: Uint8Array[] = new Array(64)
-    .fill(0)
-    .map((_) => new Uint8Array([0, 0, 0, 0]));
-  for (let i = offset; i < originalSize + offset; i += 4) {
-    const currentPixel = output.subarray(i, i + 4);
-    ++count;
-    if (isEqual(previousPixel, currentPixel, isRGB)) {
-      ++run;
-      // QOI_OP_RUN
-      if (run === 62) {
-        output[o++] = 0b11_111101;
-        run = 0;
-      }
-    } else {
-      // QOI_OP_RUN
-      if (run) {
-        output[o++] = (0b11 << 6) + run - 1;
-        run = 0;
-      }
-
-      const index = calcIndex(currentPixel, isRGB);
-      if (isEqual(seenPixels[index], currentPixel, isRGB)) {
-        // QOI_OP_INDEX
-        output[o++] = (0b00 << 6) + index;
-        previousPixel.set(currentPixel);
-      } else {
-        seenPixels[index].set(currentPixel);
-
-        const diff = new Array(isRGB ? 3 : 4)
-          .fill(0)
-          .map((_, i) => currentPixel[i] - previousPixel[i]);
-        previousPixel.set(currentPixel);
-        if (
-          -2 <= diff[0] && diff[0] <= 1 &&
-          -2 <= diff[1] && diff[1] <= 1 &&
-          -2 <= diff[2] && diff[2] <= 1 &&
-          !diff[3]
-        ) {
-          // QOI_OP_DIFF
-          output[o++] = (0b01 << 6) +
-            (diff[0] + 2 << 4) +
-            (diff[1] + 2 << 2) +
-            diff[2] + 2;
-        } else {
-          diff[0] -= diff[1];
-          diff[2] -= diff[1];
-          if (
-            -8 <= diff[0] && diff[0] <= 7 &&
-            -32 <= diff[1] && diff[1] <= 31 &&
-            -8 <= diff[2] && diff[2] <= 7 &&
-            !diff[3]
-          ) {
-            // QOI_OP_LUMA
-            output[o++] = (0b10 << 6) + diff[1] + 32;
-            output[o++] = (diff[0] + 8 << 4) + diff[2] + 8;
-          } else if (isRGB) {
-            // QOI_OP_RGB
-            output.set(currentPixel.subarray(0, 3), o + 1);
-            output[o] = 0b11111110;
-            o += 4;
-          } else {
-            // QOI_OP_RGBA
-            if (o >= i) {
-              output.set(output.subarray(i, originalSize + offset++), ++i);
-            }
-            output.set(output.subarray(i, i + 4), o + 1);
-            output[o] = 0b11111111;
-            o += 5;
-          }
-        }
-      }
-    }
-  }
-  if (run) {
-    // QOI_OP_RUN
-    output[o++] = (0b11 << 6) + run - 1;
-  }
+  const encoder = createEncoder(isRGB);
+  const { i, o } = encoder(output, maxSize - originalSize, 14);
+  const count = (i - (maxSize - originalSize)) / 4;
   if (options.width * options.height !== count) {
     throw new RangeError(
       `Width * height (${
