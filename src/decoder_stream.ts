@@ -2,6 +2,21 @@ import { toByteStream } from "@std/streams/unstable-to-byte-stream";
 import type { QOIOptions } from "./types.ts";
 import { createDecoder } from "./_common.ts";
 
+/**
+ * The QOIDecoderStream is a TransformStream that decodes qoi image format into
+ * raw image data. The raw data is a sequence of `[ r, g, b, a ]` numbers.
+ *
+ * @example
+ * ```ts ignore
+ * import { QOIDecoderStream } from "img/qoi";
+ *
+ * const rawStream = (await Deno.open("image.qoi"))
+ *   .readable
+ *   .pipeThrough(new QOIDecoderStream(header => console.log(header)));
+ * ```
+ *
+ * @module
+ */
 export class QOIDecoderStream
   implements TransformStream<Uint8Array, Uint8Array> {
   #readable: ReadableStream<Uint8Array>;
