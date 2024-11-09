@@ -6,7 +6,7 @@ Deno.test("QOIEncoderStream() correctly encoding header", async () => {
   assertEquals(
     (await toBytes(
       ReadableStream
-        .from([new Uint8Array([0, 0, 0, 255, 0, 0, 0, 255])])
+        .from([new Uint8Array([0, 0]), new Uint8Array([0, 255, 0, 0, 0, 255])])
         .pipeThrough(
           new QOIEncoderStream({
             width: 2,
@@ -184,7 +184,7 @@ Deno.test("QOIEncoderStream() rejecting due to unexpected number of bytes", asyn
       );
     },
     RangeError,
-    "Unexpected number of bytes from readable stream",
+    "Unexpected number of bytes from stream",
   );
 });
 

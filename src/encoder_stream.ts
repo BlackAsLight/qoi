@@ -31,21 +31,13 @@ import type { QOIOptions } from "./types.ts";
  *
  * @module
  */
-export class QOIEncoderStream
-  implements TransformStream<Uint8Array, Uint8Array> {
-  #width: number;
-  #height: number;
-  #isRGB: boolean;
-  #colorspace: 0 | 1;
-  #source: ReadableStreamBYOBReader;
-  #readable: ReadableStream<Uint8Array>;
-  #writable: WritableStream<Uint8Array>;
+export class QOIEncoderStream extends TransformStream<Uint8Array, Uint8Array> {
   constructor(options: QOIOptions) {
-    if (options.width < 0) {
-      throw new RangeError("Width cannot be a negative number");
+    if (options.width < 0 || Number.isNaN(options.width)) {
+      throw new RangeError("Width cannot be a negative number or NaN");
     }
-    if (options.height < 0) {
-      throw new RangeError("Height cannot be a negative number");
+    if (options.height < 0 || Number.isNaN(options.height)) {
+      throw new RangeError("Height cannot be a negative number or NaN");
     }
     this.#width = options.width;
     this.#height = options.height;
