@@ -28,6 +28,7 @@
     "exclude": ["coverage/", "**/.*"]
   },
   "lint": {
+    "exclude": ["coverage/", "**/.*"],
     "rules": {
       "tags": ["recommended"],
       "include": [
@@ -46,5 +47,8 @@
         "verbatim-module-syntax"
       ]
     }
+  },
+  "test": {
+    "exclude": ["coverage/", "**/.*"]
   }
 }
