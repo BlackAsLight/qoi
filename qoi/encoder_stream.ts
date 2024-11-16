@@ -10,6 +10,8 @@ import type { QOIOptions } from "./types.ts";
  * ```ts
  * import { QOIEncoderStream } from "@img/qoi";
  *
+ * await Deno.mkdir(".output/", { recursive: true });
+ *
  * await ReadableStream
  *   .from(async function* () {
  *     for (let r = 0; r < 256; ++r) {
@@ -26,7 +28,7 @@ import type { QOIOptions } from "./types.ts";
  *       colorspace: 0,
  *     }),
  *   )
- *   .pipeTo((await Deno.create("image.qoi")).writable);
+ *   .pipeTo((await Deno.create(".output/image.qoi")).writable);
  * ```
  *
  * @module

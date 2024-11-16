@@ -2,21 +2,20 @@ name: Run Tests
 on:
   push:
     branches:
-      - main
+      - "*"
   pull_request:
-    branches:
-      - main
   workflow_dispatch:
 jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
       - uses: actions/checkout@v4
       - uses: denoland/setup-deno@v2
-      - run: deno test -R='./' -W='./' --parallel --doc --trace-leaks
+      - run: deno test -R='.output/' -W='.output/' --parallel --doc --trace-leaks
   lint:
     runs-on: ubuntu-latest
     steps:
