@@ -13,6 +13,8 @@
  * ```ts
  * import { encodeQOI } from "@img/qoi";
  *
+ * await Deno.mkdir(".output/", { recursive: true });
+ *
  * const rawData = await new Response(ReadableStream.from(async function* () {
  *   for (let r = 0; r < 256; ++r) {
  *     for (let c = 0; c < 256; ++c) {
@@ -21,7 +23,7 @@
  *   }
  * }())).bytes();
  *
- * await Deno.writeFile("image.qoi", encodeQOI(rawData, {
+ * await Deno.writeFile(".output/image.qoi", encodeQOI(rawData, {
  *   width: 256,
  *   height: 256,
  *   channels: "rgb",

@@ -1,35 +1,26 @@
-# qoi
+# Img
 
-This is a TypeScript implementation of the QOI image format. The module offers
-both sync and streaming versions to encode and decode to and from the QOI image
-format. The raw pixel format/ the decoded format is a repeating sequence of
-`[ r, g, b, a ]` in a `Uint8Array`, `Uint8ClampedArray`, or a
-`ReadableStream<Uint8Array>`.
+Img is a repo containing implemenetations, made from scratch, of various image
+formats offering the ability to encode and decode between them, and integrate
+smoothly with various Web APIs like the Canvas. Where possible, we offer both
+sync and streaming encoders/decoders.
 
-This implementationis based off the
-[QOI Specification](https://qoiformat.org/qoi-specification.pdf). You can find
-about more about QOI at their website: https://qoiformat.org/.
+## Missing a format?
 
-## Example
+If this repo is missing a format you'd like to work with, simply create an issue
+suggesting the format, along with a link to the standard, specifcation or some
+document that is essentally the source of truth for that format. Do that and it
+might get an implementation here.
 
-```ts
-import { encodeQOI } from "@img/qoi";
+## Formats
 
-const rawData = await new Response(ReadableStream.from(async function* () {
-  for (let r = 0; r < 256; ++r) {
-    for (let c = 0; c < 256; ++c) {
-      yield Uint8Array.from([255 - r, c, r, 255]);
-    }
-  }
-}())).bytes();
-
-await Deno.writeFile(
-  "image.qoi",
-  encodeQOI(rawData, {
-    width: 256,
-    height: 256,
-    channels: "rgb",
-    colorspace: 0,
-  }),
-);
-```
+| Package                               | Latest Version                         | Spec                                                         |
+| ------------------------------------- | -------------------------------------- | ------------------------------------------------------------ |
+| [@img/apng](https://jsr.io/@img/apng) | Not Implemented Yet                    | https://wiki.mozilla.org/APNG_Specification                  |
+| [@img/avif](https://jsr.io/@img/avif) | Not Implemented Yet                    | https://aomediacodec.github.io/av1-avif/v1.1.0.html          |
+| [@img/gif](https://jsr.io/@img/gif)   | Not Implemented Yet                    | https://www.w3.org/Graphics/GIF/spec-gif89a.txt              |
+| [@img/jpeg](https://jsr.io/@img/jpeg) | Not Implemented Yet                    | https://www.w3.org/Graphics/JPEG/jfif3.pdf                   |
+| [@img/png](https://jsr.io/@img/png)   | Not Implemented Yet                    | https://www.w3.org/TR/2003/REC-PNG-20031110/                 |
+| [@img/qoi](https://jsr.io/@img/qoi)   | ![JSR](https://jsr.io/badges/@img/qoi) | https://qoiformat.org/qoi-specification.pdf                  |
+| [@img/avg](https://jsr.io/@img/svg)   | Not Implemented Yet                    | https://www.w3.org/TR/SVG2/                                  |
+| [@img/webp](https://jsr.io/@img/webp) | Not Implemented Yet                    | https://developers.google.com/speed/webp/docs/riff_container |

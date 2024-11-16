@@ -1,0 +1,11 @@
+{
+  "name": "@img/qoi",
+  "version": "0.1.3",
+  "exports": {
+    ".": "./mod.ts",
+    "./decode": "./decode.ts",
+    "./decoder-stream": "./decoder_stream.ts",
+    "./encode": "./encode.ts",
+    "./encoder-stream": "./encoder_stream.ts"
+  }
+}
