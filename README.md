@@ -24,3 +24,7 @@ might get an implementation here.
 | [@img/qoi](https://jsr.io/@img/qoi)   | ![JSR](https://jsr.io/badges/@img/qoi) | https://qoiformat.org/qoi-specification.pdf                  |
 | [@img/avg](https://jsr.io/@img/svg)   | Not Implemented Yet                    | https://www.w3.org/TR/SVG2/                                  |
 | [@img/webp](https://jsr.io/@img/webp) | Not Implemented Yet                    | https://developers.google.com/speed/webp/docs/riff_container |
+
+## Coverage
+
+[Coverage of Repo](https://blackaslight.github.io/img/)
