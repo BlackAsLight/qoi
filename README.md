@@ -22,7 +22,7 @@ might get an implementation here.
 | [@img/jpeg](https://jsr.io/@img/jpeg) | Not Implemented Yet                    | https://www.w3.org/Graphics/JPEG/jfif3.pdf                   |
 | [@img/png](https://jsr.io/@img/png)   | Not Implemented Yet                    | https://www.w3.org/TR/2003/REC-PNG-20031110/                 |
 | [@img/qoi](https://jsr.io/@img/qoi)   | ![JSR](https://jsr.io/badges/@img/qoi) | https://qoiformat.org/qoi-specification.pdf                  |
-| [@img/avg](https://jsr.io/@img/svg)   | Not Implemented Yet                    | https://www.w3.org/TR/SVG2/                                  |
+| [@img/svg](https://jsr.io/@img/svg)   | Not Implemented Yet                    | https://www.w3.org/TR/SVG2/                                  |
 | [@img/webp](https://jsr.io/@img/webp) | Not Implemented Yet                    | https://developers.google.com/speed/webp/docs/riff_container |
 
 ## Coverage
